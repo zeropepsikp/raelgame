@@ -45,6 +45,10 @@ GitHub Pages: https://zeropepsikp.github.io/raelgame/
 
 옵션 데이터는 `game.js`의 `EQUIP_OPTIONS`에 정의되어 있어 항목 추가가 쉽습니다.
 
+## 🎮 언리얼 엔진 버전
+
+웹 버전과 별개로, 언리얼 엔진 5(C++)로 포팅한 버전이 [`PrincessStoryUE/`](PrincessStoryUE/) 폴더에 있습니다 (`claude/unreal-engine-feasibility-uss17h` 브랜치). UE5는 웹 익스포트를 지원하지 않으므로 PC에 언리얼 엔진을 설치해 실행해야 합니다. 자세한 내용은 [PrincessStoryUE/README.md](PrincessStoryUE/README.md) 참고.
+
 ## 개발
 
 빌드 과정 없음 — 정적 파일(`index.html`, `game.js`)만으로 동작합니다.

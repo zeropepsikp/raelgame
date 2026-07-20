@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.4",
+	"Category": "Game",
+	"Description": "Princess Story - MapleStory-style side scroller (Unreal Engine port)",
+	"Modules": [
+		{
+			"Name": "PrincessStory",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
