@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a2e">
+<title>프린세스 스토리</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+  html, body { width:100%; height:100%; overflow:hidden; background:#0b0b16; touch-action:none; overscroll-behavior:none; position:fixed; }
+  body { display:flex; align-items:center; justify-content:center; font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif; }
+  #game { display:block; background:#87ceeb; }
+
+  /* ---------- Touch controls ---------- */
+  .ctl { position:fixed; border-radius:50%; background:rgba(255,255,255,.14); border:2px solid rgba(255,255,255,.35);
+         color:#fff; font-weight:bold; display:flex; align-items:center; justify-content:center; flex-direction:column;
+         z-index:20; touch-action:none; text-shadow:0 1px 2px rgba(0,0,0,.6); }
+  .ctl:active, .ctl.pressed { background:rgba(255,255,255,.35); }
+  #btnL { left:calc(14px + env(safe-area-inset-left)); bottom:22px; width:74px; height:74px; font-size:30px; }
+  #btnR { left:calc(102px + env(safe-area-inset-left)); bottom:22px; width:74px; height:74px; font-size:30px; }
+  #btnJump { right:calc(16px + env(safe-area-inset-right)); bottom:20px; width:80px; height:80px; font-size:15px; background:rgba(120,200,255,.22); border-color:rgba(160,220,255,.5); }
+  #btnAtk  { right:calc(106px + env(safe-area-inset-right)); bottom:24px; width:72px; height:72px; font-size:14px; background:rgba(255,120,120,.22); border-color:rgba(255,160,160,.5); }
+  #btnS1   { right:calc(112px + env(safe-area-inset-right)); bottom:106px; width:60px; height:60px; font-size:12px; background:rgba(255,190,90,.22); border-color:rgba(255,210,130,.5); }
+  #btnS2   { right:calc(34px + env(safe-area-inset-right)); bottom:110px; width:60px; height:60px; font-size:12px; background:rgba(220,120,255,.22); border-color:rgba(230,160,255,.5); }
+  .ctl .cd { font-size:11px; color:#ffe98a; height:12px; line-height:12px; }
+  .ctl.disabled { opacity:.35; }
+
+  #btnCtx { position:fixed; left:50%; transform:translateX(-50%); bottom:118px; z-index:20;
+            padding:10px 22px; border-radius:22px; background:rgba(70,210,140,.85); color:#fff; font-weight:bold;
+            font-size:15px; border:2px solid rgba(255,255,255,.6); display:none; box-shadow:0 2px 8px rgba(0,0,0,.4); touch-action:none; }
+
+  /* ---------- Dialog ---------- */
+  #dialog { position:fixed; left:50%; transform:translateX(-50%); bottom:24px; width:min(560px, 86vw);
+            background:linear-gradient(#fdf6e3,#f5e8c8); border:3px solid #8a6d3b; border-radius:12px;
+            padding:12px 16px; z-index:30; display:none; box-shadow:0 4px 16px rgba(0,0,0,.5); }
+  #dlgName { font-weight:bold; color:#7a4f16; font-size:14px; margin-bottom:4px; }
+  #dlgText { color:#3a2c12; font-size:14px; line-height:1.5; min-height:40px; }
+  #dlgBtns { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+  #dlgBtns button { padding:8px 14px; border-radius:8px; border:2px solid #8a6d3b; background:#fff8e6; color:#5a3d10;
+                    font-weight:bold; font-size:13px; }
+  #dlgBtns button:active { background:#ffe9b0; }
+  #dlgHint { text-align:right; color:#a08040; font-size:11px; margin-top:4px; }
+
+  /* ---------- Rotate overlay ---------- */
+  #rotate { position:fixed; inset:0; background:#141428; z-index:100; display:none; align-items:center; justify-content:center;
+            flex-direction:column; color:#fff; gap:14px; text-align:center; }
+  #rotate .phone { font-size:56px; animation:rot 1.6s ease-in-out infinite; }
+  @keyframes rot { 0%,20%{transform:rotate(0)} 60%,100%{transform:rotate(90deg)} }
+  @media (orientation: portrait) { #rotate { display:flex; } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="btnL"  class="ctl">◀</div>
+<div id="btnR"  class="ctl">▶</div>
+<div id="btnJump" class="ctl">점프</div>
+<div id="btnAtk"  class="ctl">공격<span class="cd"></span></div>
+<div id="btnS1"   class="ctl">애로우<span class="cd"></span></div>
+<div id="btnS2"   class="ctl">블래스트<span class="cd"></span></div>
+<div id="btnCtx"></div>
+
+<div id="dialog">
+  <div id="dlgName"></div>
+  <div id="dlgText"></div>
+  <div id="dlgBtns"></div>
+  <div id="dlgHint">탭하여 계속 ▼</div>
+</div>
+
+<div id="rotate">
+  <div class="phone">📱</div>
+  <div style="font-size:18px;font-weight:bold;">기기를 가로로 돌려주세요!</div>
+  <div style="font-size:13px;color:#aab;">프린세스 스토리는 가로 화면에 최적화되어 있어요.</div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
