@@ -41,4 +41,4 @@ python3 -m http.server 8000
 # → http://localhost:8000
 ```
 
-배포는 `.github/workflows/deploy.yml`이 담당하며, `claude/maple-story-game-nlkicy` 브랜치에 푸시하면 GitHub Pages로 자동 배포됩니다.
+배포는 `.github/workflows/deploy.yml`이 담당합니다. `claude/maple-story-game-nlkicy` 브랜치에 푸시하면 워크플로우가 `gh-pages` 브랜치로 내용을 동기화하고, GitHub Pages가 `gh-pages` 브랜치를 서빙합니다.
