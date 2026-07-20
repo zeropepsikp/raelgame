@@ -27,6 +27,36 @@
   .ctl .cd { font-size:11px; color:#ffe98a; height:12px; line-height:12px; }
   .ctl.disabled { opacity:.35; }
 
+  /* ---------- 순간이동 ---------- */
+  #btnTele { position:fixed; left:50%; top:10px; transform:translateX(-50%); z-index:20;
+             padding:7px 16px; border-radius:18px; background:rgba(60,120,255,.75); color:#fff; font-weight:bold;
+             font-size:13px; border:2px solid rgba(255,255,255,.55); box-shadow:0 2px 8px rgba(0,0,0,.4); touch-action:none; }
+  #btnTele:active { background:rgba(90,150,255,.9); }
+  #telePanel { position:fixed; left:50%; top:48px; transform:translateX(-50%); z-index:40; display:none;
+               background:linear-gradient(#fdf6e3,#f5e8c8); border:3px solid #8a6d3b; border-radius:12px;
+               padding:10px 12px; box-shadow:0 4px 16px rgba(0,0,0,.5); width:min(420px,90vw); }
+  #telePanel .tHead { font-weight:bold; color:#7a4f16; font-size:14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  #teleList { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  #teleList button { padding:9px 6px; border-radius:8px; border:2px solid #8a6d3b; background:#fff8e6; color:#5a3d10;
+                     font-weight:bold; font-size:13px; }
+  #teleList button:active { background:#ffe9b0; }
+  #teleList button.cur { background:#ffe9b0; border-color:#c49a3b; }
+  .xBtn { border:2px solid #8a6d3b; background:#fff8e6; color:#7a4f16; border-radius:8px; font-weight:bold;
+          font-size:13px; padding:3px 10px; }
+
+  /* ---------- 코디샵 ---------- */
+  #costume { position:fixed; right:calc(8px + env(safe-area-inset-right)); top:50%; transform:translateY(-50%); z-index:40; display:none;
+             background:linear-gradient(#fdf6e3,#f5e8c8); border:3px solid #8a6d3b; border-radius:12px;
+             padding:10px 12px; box-shadow:0 4px 16px rgba(0,0,0,.5); width:262px; max-height:92vh; overflow-y:auto; }
+  #costume .cHead { font-weight:bold; color:#7a4f16; font-size:14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  .cRow { display:flex; align-items:center; gap:5px; margin-bottom:6px; }
+  .cRow .cLabel { width:38px; font-size:12px; font-weight:bold; color:#7a4f16; flex-shrink:0; }
+  .cRow button { width:30px; height:30px; border-radius:8px; border:2px solid #8a6d3b; background:#fff8e6;
+                 color:#5a3d10; font-weight:bold; font-size:13px; flex-shrink:0; }
+  .cRow button:active { background:#ffe9b0; }
+  .cRow .cVal { flex:1; text-align:center; font-size:12px; font-weight:bold; color:#3a2c12;
+                background:#fffdf5; border:1px solid #d8c49a; border-radius:6px; padding:6px 2px; }
+
   #btnCtx { position:fixed; left:50%; transform:translateX(-50%); bottom:118px; z-index:20;
             padding:10px 22px; border-radius:22px; background:rgba(70,210,140,.85); color:#fff; font-weight:bold;
             font-size:15px; border:2px solid rgba(255,255,255,.6); display:none; box-shadow:0 2px 8px rgba(0,0,0,.4); touch-action:none; }
@@ -61,6 +91,17 @@
 <div id="btnS1"   class="ctl">애로우<span class="cd"></span></div>
 <div id="btnS2"   class="ctl">블래스트<span class="cd"></span></div>
 <div id="btnCtx"></div>
+
+<div id="btnTele">🗺️ 순간이동</div>
+<div id="telePanel">
+  <div class="tHead"><span>🗺️ 어디로 이동할까요?</span><button class="xBtn" id="teleClose">✕</button></div>
+  <div id="teleList"></div>
+</div>
+
+<div id="costume">
+  <div class="cHead"><span>👗 미미의 코디샵</span><button class="xBtn" id="costClose">✕</button></div>
+  <div id="costRows"></div>
+</div>
 
 <div id="dialog">
   <div id="dlgName"></div>

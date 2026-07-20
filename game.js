@@ -48,6 +48,79 @@ const CHAR_STYLE = {
   eye: '#4a3020', shoe: '#c94f7c', sword: '#dbe4f0', swordEdge: '#aab8cc', hilt: '#e8b64c'
 };
 
+// ---------- 코디(장비) 시스템 ----------
+const EQUIP_OPTIONS = {
+  hair: [
+    { name: '금발 긴머리', style: 'long', color: '#ffd76e', shade: '#eab63f' },
+    { name: '핑크 긴머리', style: 'long', color: '#ff9ec7', shade: '#e470a3' },
+    { name: '갈색 포니테일', style: 'pony', color: '#8a5a2b', shade: '#6b4320' },
+    { name: '흑발 단발', style: 'bob', color: '#3f3f52', shade: '#2a2a38' },
+    { name: '은발 트윈테일', style: 'twin', color: '#dce0ec', shade: '#aab0c4' },
+    { name: '레드 단발', style: 'bob', color: '#d85252', shade: '#a83636' }
+  ],
+  hat: [
+    { name: '티아라', style: 'tiara' },
+    { name: '없음', style: 'none' },
+    { name: '마법사 모자', style: 'wizard', color: '#6a4a9a', dark: '#503678' },
+    { name: '빨간 리본', style: 'ribbon', color: '#e63960' },
+    { name: '밀짚모자', style: 'straw', color: '#e8c86a', dark: '#c9a94a' }
+  ],
+  glasses: [
+    { name: '없음', style: 'none' },
+    { name: '둥근 안경', style: 'round' },
+    { name: '선글라스', style: 'sun' }
+  ],
+  top: [
+    { name: '핑크 드레스', color: '#ff7fb2', dark: '#e0518e', trim: '#fff0f6' },
+    { name: '하늘 드레스', color: '#7fb8ff', dark: '#4f88e0', trim: '#f0f7ff' },
+    { name: '보라 드레스', color: '#b98fe8', dark: '#8f5ec4', trim: '#f5eeff' },
+    { name: '민트 드레스', color: '#7fdec0', dark: '#4bbf97', trim: '#eefff8' },
+    { name: '블랙 드레스', color: '#4a4a5c', dark: '#32323f', trim: '#c8c8d8' }
+  ],
+  bottom: [
+    { name: '롱 스커트', style: 'long', color: null },
+    { name: '미니 스커트', style: 'mini', color: null },
+    { name: '화이트 롱스커트', style: 'long', color: '#f2f2f8', dark: '#cfcfde' },
+    { name: '청바지', style: 'pants', color: '#4a6a9a', dark: '#35507a' },
+    { name: '블랙 스커트', style: 'mini', color: '#3a3a48', dark: '#26262f' }
+  ],
+  shoes: [
+    { name: '핑크 구두', style: 'shoe', color: '#c94f7c' },
+    { name: '갈색 부츠', style: 'boot', color: '#8a5a34' },
+    { name: '블랙 부츠', style: 'boot', color: '#33333f' },
+    { name: '화이트 구두', style: 'shoe', color: '#e8e8f0' }
+  ],
+  weapon: [
+    { name: '프린세스 소드', style: 'sword' },
+    { name: '대검', style: 'great' },
+    { name: '단검', style: 'dagger' },
+    { name: '배틀 액스', style: 'axe' },
+    { name: '워해머', style: 'hammer' }
+  ]
+};
+const EQUIP_LABELS = { hair: '헤어', hat: '모자', glasses: '안경', top: '상의', bottom: '하의', shoes: '신발', weapon: '무기' };
+const equip = { hair: 0, hat: 0, glasses: 0, top: 0, bottom: 0, shoes: 0, weapon: 0 };
+
+// 현재 장비 조합으로 렌더링용 외형 계산
+function getLook() {
+  const h = EQUIP_OPTIONS.hair[equip.hair];
+  const t = EQUIP_OPTIONS.top[equip.top];
+  const b = EQUIP_OPTIONS.bottom[equip.bottom];
+  const s = EQUIP_OPTIONS.shoes[equip.shoes];
+  return {
+    skin: CHAR_STYLE.skin, skinShade: CHAR_STYLE.skinShade,
+    hair: h.color, hairShade: h.shade, hairStyle: h.style,
+    hat: EQUIP_OPTIONS.hat[equip.hat],
+    glasses: EQUIP_OPTIONS.glasses[equip.glasses].style,
+    dress: t.color, dressDark: t.dark, dressTrim: t.trim,
+    bottom: { style: b.style, color: b.color || t.color, dark: b.dark || t.dark },
+    shoes: s,
+    weapon: EQUIP_OPTIONS.weapon[equip.weapon].style,
+    crown: CHAR_STYLE.crown, gem: CHAR_STYLE.gem, eye: CHAR_STYLE.eye,
+    sword: CHAR_STYLE.sword, swordEdge: CHAR_STYLE.swordEdge, hilt: CHAR_STYLE.hilt
+  };
+}
+
 // ---------- 유틸 ----------
 const rand = (a, b) => a + Math.random() * (b - a);
 const irand = (a, b) => Math.floor(rand(a, b + 1));
@@ -108,6 +181,11 @@ const NPCS = {
     name: '요정 아리엘', kind: 'fairy',
     lines: ['안녕! 나는 수호요정 아리엘이야.', '왼쪽 버튼으로 이동하고, 오른쪽 버튼으로 점프와 공격을 할 수 있어.', '"애로우"는 마법 화살을 쏘고, "블래스트"는 주변의 적을 한 번에 쓸어버리는 필살기야! 마나(파란 게이지)를 소모하니 조심해.', '오른쪽 포탈을 지나면 사냥터가 나와. 몬스터를 잡아 레벨을 올려봐!'],
   },
+  mimi: {
+    name: '디자이너 미미', kind: 'stylist',
+    lines: ['어서 와, 공주님! 왕국 최고의 디자이너 미미야.', '헤어부터 무기까지, 원하는 스타일로 언제든 바꿔줄게. 옷 갈아입어 볼래?'],
+    stylist: true
+  },
   gaon: {
     name: '기사단장 가온', kind: 'knight',
     lines: ['멈추십시오, 공주님! 이 동굴 깊은 곳에는 무시무시한 보스들이 잠들어 있습니다.', '오른쪽 끝 포탈은 화염의 마신 "자쿰"의 제단으로, 위쪽 포탈은 어둠의 마수 "발록"의 둥지로 이어집니다.', '충분히 강해진 뒤에 도전하시길... 무운을 빕니다!'],
@@ -118,14 +196,14 @@ const NPCS = {
 function g(w) { return { x: 0, y: GROUND, w: w, ground: true }; }
 const MAPS = [
   { // 0
-    name: '프린세스 마을', theme: 'town', w: 2000,
+    name: '프린세스 마을', theme: 'town', w: 2000, entry: 300, icon: '🏰',
     platforms: [g(2000), { x: 520, y: 360, w: 180 }, { x: 1250, y: 360, w: 180 }],
     portals: [{ x: 1930, to: 1, tx: 140, label: '초원 언덕' }],
-    npcs: [{ id: 'rosa', x: 660 }, { id: 'ariel', x: 1000 }],
+    npcs: [{ id: 'rosa', x: 660 }, { id: 'ariel', x: 1000 }, { id: 'mimi', x: 1400 }],
     spawns: []
   },
   { // 1
-    name: '초원 언덕', theme: 'meadow', w: 2800,
+    name: '초원 언덕', theme: 'meadow', w: 2800, entry: 160, icon: '🌿',
     platforms: [g(2800), { x: 600, y: 370, w: 210 }, { x: 1300, y: 370, w: 230 }, { x: 1680, y: 280, w: 170 }, { x: 2150, y: 370, w: 210 }],
     portals: [{ x: 70, to: 0, tx: 1860, label: '프린세스 마을' }, { x: 2730, to: 2, tx: 150, label: '버섯 숲' }],
     npcs: [],
@@ -133,7 +211,7 @@ const MAPS = [
              { t: 'slime', x: 1020 }, { t: 'slime', x: 1900 }, { t: 'slime', x: 2280 }]
   },
   { // 2
-    name: '버섯 숲', theme: 'forest', w: 2800,
+    name: '버섯 숲', theme: 'forest', w: 2800, entry: 160, icon: '🍄',
     platforms: [g(2800), { x: 500, y: 360, w: 220 }, { x: 1150, y: 350, w: 240 }, { x: 1850, y: 360, w: 220 }, { x: 2180, y: 270, w: 180 }],
     portals: [{ x: 70, to: 1, tx: 2650, label: '초원 언덕' }, { x: 2730, to: 3, tx: 150, label: '어둠의 동굴' }],
     npcs: [],
@@ -141,7 +219,7 @@ const MAPS = [
              { t: 'pig', x: 1250 }, { t: 'pig', x: 2000 }, { t: 'pig', x: 2250 }]
   },
   { // 3
-    name: '어둠의 동굴', theme: 'cave', w: 2800,
+    name: '어둠의 동굴', theme: 'cave', w: 2800, entry: 180, icon: '🌑',
     platforms: [g(2800), { x: 620, y: 370, w: 200 }, { x: 1350, y: 360, w: 230 }, { x: 1750, y: 290, w: 190 }, { x: 2080, y: 200, w: 180 }],
     portals: [{ x: 70, to: 2, tx: 2650, label: '버섯 숲' },
               { x: 2730, to: 4, tx: 130, label: '자쿰의 제단' },
@@ -151,14 +229,14 @@ const MAPS = [
              { t: 'golem', x: 1300 }, { t: 'golem', x: 2500 }]
   },
   { // 4
-    name: '자쿰의 제단', theme: 'altar', w: 1700,
+    name: '자쿰의 제단', theme: 'altar', w: 1700, entry: 140, icon: '🔥',
     platforms: [g(1700), { x: 250, y: 370, w: 170 }, { x: 1280, y: 370, w: 170 }],
     portals: [{ x: 70, to: 3, tx: 2650, label: '어둠의 동굴' }],
     npcs: [],
     spawns: [{ t: 'zakum', x: 1000 }]
   },
   { // 5
-    name: '발록의 둥지', theme: 'lair', w: 1900,
+    name: '발록의 둥지', theme: 'lair', w: 1900, entry: 140, icon: '😈',
     platforms: [g(1900), { x: 400, y: 360, w: 180 }, { x: 1350, y: 360, w: 180 }],
     portals: [{ x: 70, to: 3, tx: 2360, label: '어둠의 동굴' }],
     npcs: [],
@@ -192,7 +270,7 @@ let dialog = null; // {npc, i}
 function save() {
   try {
     localStorage.setItem('princess_save', JSON.stringify({
-      level: player.level, exp: player.exp, mesos: player.mesos
+      level: player.level, exp: player.exp, mesos: player.mesos, equip
     }));
   } catch (e) {}
 }
@@ -202,6 +280,12 @@ function load() {
     if (d) {
       player.level = d.level || 1; player.exp = d.exp || 0; player.mesos = d.mesos || 0;
       player.hp = maxHp(); player.mp = maxMp();
+      if (d.equip) {
+        for (const k in equip) {
+          const v = d.equip[k];
+          if (Number.isInteger(v) && v >= 0 && v < EQUIP_OPTIONS[k].length) equip[k] = v;
+        }
+      }
     }
   } catch (e) {}
 }
@@ -283,7 +367,7 @@ function gainExp(e) {
   save();
 }
 function hurtPlayer(dmg, fromX) {
-  if (player.invul > 0 || player.dead || dialog) return;
+  if (player.invul > 0 || player.dead || uiBlocked()) return;
   const d = Math.round(dmg * rand(0.9, 1.1));
   player.hp -= d;
   player.invul = 1.2;
@@ -302,18 +386,18 @@ function hurtPlayer(dmg, fromX) {
 
 // ---------- 플레이어 행동 ----------
 function doJump() {
-  if (player.dead || dialog) return;
+  if (player.dead || uiBlocked()) return;
   if (player.onGround) { player.vy = JUMP_V; player.onGround = false; SFX.jump(); }
 }
 function doAttack() {
-  if (player.dead || dialog || cd.atk > 0 || player.atkT > 0) return;
+  if (player.dead || uiBlocked() || cd.atk > 0 || player.atkT > 0) return;
   cd.atk = CD_MAX.atk;
   player.atkT = 0.3; player.atkKind = 'basic';
   player.pending = { t: 0.1, type: 'basic' };
   SFX.swing();
 }
 function doSkill1() {
-  if (player.dead || dialog || cd.s1 > 0 || player.mp < SKILL_MP.s1) return;
+  if (player.dead || uiBlocked() || cd.s1 > 0 || player.mp < SKILL_MP.s1) return;
   cd.s1 = CD_MAX.s1;
   player.mp -= SKILL_MP.s1;
   player.atkT = 0.28; player.atkKind = 's1';
@@ -321,7 +405,7 @@ function doSkill1() {
   SFX.skill1();
 }
 function doSkill2() {
-  if (player.dead || dialog || cd.s2 > 0 || player.mp < SKILL_MP.s2) return;
+  if (player.dead || uiBlocked() || cd.s2 > 0 || player.mp < SKILL_MP.s2) return;
   cd.s2 = CD_MAX.s2;
   player.mp -= SKILL_MP.s2;
   player.atkT = 0.55; player.atkKind = 's2';
@@ -373,6 +457,8 @@ function nearNpc() {
 function doContext() {
   if (player.dead) return;
   if (dialog) { advanceDialog(); return; }
+  if (costumeOpen || teleOpen) return;
+  if (costumeOpen || teleOpen) return;
   const n = nearNpc();
   if (n) { startDialog(n); return; }
   const pt = nearPortal();
@@ -399,8 +485,17 @@ function showDialogLine() {
   dlgText.textContent = d.def.lines[d.i];
   dlgBtns.innerHTML = '';
   const last = d.i >= d.def.lines.length - 1;
-  dlgHint.style.display = (last && d.def.shop) ? 'none' : 'block';
+  dlgHint.style.display = (last && (d.def.shop || d.def.stylist)) ? 'none' : 'block';
   dlgHint.textContent = last ? '탭하여 닫기 ✕' : '탭하여 계속 ▼';
+  if (last && d.def.stylist) {
+    const b1 = document.createElement('button');
+    b1.textContent = '👗 옷 갈아입기';
+    b1.onclick = (e) => { e.stopPropagation(); closeDialog(); openCostume(); };
+    const b2 = document.createElement('button');
+    b2.textContent = '닫기';
+    b2.onclick = (e) => { e.stopPropagation(); closeDialog(); };
+    dlgBtns.appendChild(b1); dlgBtns.appendChild(b2);
+  }
   if (last && d.def.shop) {
     const b1 = document.createElement('button');
     b1.textContent = '💖 HP/MP 회복 (50메소)';
@@ -426,8 +521,8 @@ function advanceDialog() {
   if (!dialog) return;
   const last = dialog.i >= dialog.def.lines.length - 1;
   if (last) {
-    if (!dialog.def.shop) closeDialog();
-    // shop 은 버튼으로만 닫힘
+    if (!dialog.def.shop && !dialog.def.stylist) closeDialog();
+    // shop/stylist 는 버튼으로만 닫힘
   } else {
     dialog.i++;
     showDialogLine();
@@ -435,6 +530,76 @@ function advanceDialog() {
 }
 function closeDialog() { dialog = null; dlgEl.style.display = 'none'; }
 dlgEl.addEventListener('pointerdown', (e) => { e.preventDefault(); advanceDialog(); });
+
+// ---------- 코디샵 패널 ----------
+const costEl = document.getElementById('costume');
+const costRows = document.getElementById('costRows');
+let costumeOpen = false;
+
+function buildCostumeRows() {
+  costRows.innerHTML = '';
+  for (const cat in EQUIP_OPTIONS) {
+    const row = document.createElement('div');
+    row.className = 'cRow';
+    const label = document.createElement('span');
+    label.className = 'cLabel'; label.textContent = EQUIP_LABELS[cat];
+    const prev = document.createElement('button'); prev.textContent = '◀';
+    const val = document.createElement('span');
+    val.className = 'cVal'; val.textContent = EQUIP_OPTIONS[cat][equip[cat]].name;
+    const next = document.createElement('button'); next.textContent = '▶';
+    const cycle = (dir) => {
+      const n = EQUIP_OPTIONS[cat].length;
+      equip[cat] = (equip[cat] + dir + n) % n;
+      val.textContent = EQUIP_OPTIONS[cat][equip[cat]].name;
+      SFX.coin(); save();
+    };
+    prev.addEventListener('pointerdown', (e) => { e.preventDefault(); cycle(-1); });
+    next.addEventListener('pointerdown', (e) => { e.preventDefault(); cycle(1); });
+    row.appendChild(label); row.appendChild(prev); row.appendChild(val); row.appendChild(next);
+    costRows.appendChild(row);
+  }
+}
+function openCostume() {
+  costumeOpen = true;
+  player.vx = 0;
+  buildCostumeRows();
+  costEl.style.display = 'block';
+}
+function closeCostume() { costumeOpen = false; costEl.style.display = 'none'; }
+document.getElementById('costClose').addEventListener('pointerdown', (e) => { e.preventDefault(); closeCostume(); });
+
+// ---------- 순간이동 패널 ----------
+const teleEl = document.getElementById('telePanel');
+const teleList = document.getElementById('teleList');
+let teleOpen = false;
+
+function openTele() {
+  if (dialog || costumeOpen || player.dead || fade) return;
+  teleOpen = true;
+  player.vx = 0;
+  teleList.innerHTML = '';
+  MAPS.forEach((m, i) => {
+    const b = document.createElement('button');
+    b.textContent = m.icon + ' ' + m.name;
+    if (i === curMap) b.classList.add('cur');
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      closeTele();
+      goMap(i, m.entry);
+    });
+    teleList.appendChild(b);
+  });
+  teleEl.style.display = 'block';
+}
+function closeTele() { teleOpen = false; teleEl.style.display = 'none'; }
+document.getElementById('btnTele').addEventListener('pointerdown', (e) => {
+  e.preventDefault(); initAudio();
+  if (teleOpen) closeTele(); else openTele();
+});
+document.getElementById('teleClose').addEventListener('pointerdown', (e) => { e.preventDefault(); closeTele(); });
+
+// 게임 조작을 막는 UI가 열려 있는지
+function uiBlocked() { return !!dialog || costumeOpen || teleOpen; }
 
 // ---------- 입력 ----------
 const input = { left: false, right: false };
@@ -517,8 +682,8 @@ function updatePlayer(dt) {
     return;
   }
   // 이동
-  const wantMove = !dialog && (input.left || input.right);
-  if (!dialog) {
+  const wantMove = !uiBlocked() && (input.left || input.right);
+  if (!uiBlocked()) {
     if (input.left && !input.right) { player.vx = -MOVE; player.face = -1; }
     else if (input.right && !input.left) { player.vx = MOVE; player.face = 1; }
     else player.vx *= Math.pow(0.0001, dt); // 감속 (넉백 포함)
@@ -697,7 +862,7 @@ function update(dt) {
 
   // 컨텍스트 버튼
   let ctxLabel = '';
-  if (!dialog && !player.dead) {
+  if (!uiBlocked() && !player.dead) {
     if (nearNpc()) ctxLabel = '💬 대화하기';
     else { const pt = nearPortal(); if (pt) ctxLabel = '🌀 ' + pt.label + ' 이동'; }
   }
@@ -915,9 +1080,9 @@ function drawPortals(map) {
   }
 }
 
-// ---------- 공주 캐릭터 ----------
+// ---------- 공주 캐릭터 (장비 조합 렌더링) ----------
 function drawPrincess() {
-  const S = CHAR_STYLE;
+  const S = getLook();
   const p = player;
   const t = gameTime;
   const walkP = p.walking ? Math.sin(t * 12) : 0;
@@ -933,44 +1098,100 @@ function drawPrincess() {
   if (p.invul > 0 && Math.floor(p.invul * 12) % 2 === 0) ctx.globalAlpha = 0.45;
   ctx.translate(0, -bob);
 
-  // 뒷머리 (긴 머리)
+  // ----- 뒷머리 (헤어 스타일별) -----
   ctx.fillStyle = S.hair;
-  ctx.beginPath();
-  ctx.moveTo(-4, -58);
-  ctx.quadraticCurveTo(-22, -50, -18 - walkP * 2, -18);
-  ctx.quadraticCurveTo(-14, -12, -8, -16);
-  ctx.quadraticCurveTo(-14, -34, -8, -50);
-  ctx.fill();
+  if (S.hairStyle === 'long') {
+    ctx.beginPath();
+    ctx.moveTo(-4, -58);
+    ctx.quadraticCurveTo(-22, -50, -18 - walkP * 2, -18);
+    ctx.quadraticCurveTo(-14, -12, -8, -16);
+    ctx.quadraticCurveTo(-14, -34, -8, -50);
+    ctx.fill();
+  } else if (S.hairStyle === 'pony') {
+    ctx.beginPath();
+    ctx.moveTo(-7, -58);
+    ctx.quadraticCurveTo(-20, -52, -15 - walkP * 2, -28);
+    ctx.quadraticCurveTo(-12, -22, -7, -26);
+    ctx.quadraticCurveTo(-13, -42, -6, -54);
+    ctx.fill();
+    ctx.fillStyle = '#e05a7a';
+    ctx.fillRect(-12, -57, 6, 4);
+  } else if (S.hairStyle === 'twin') {
+    for (const off of [-14, 10]) {
+      ctx.beginPath();
+      ctx.moveTo(off, -55);
+      ctx.quadraticCurveTo(off - 6, -44, off - 3 - walkP * 1.5, -26);
+      ctx.quadraticCurveTo(off, -22, off + 3, -26);
+      ctx.quadraticCurveTo(off + 3, -42, off + 4, -53);
+      ctx.fill();
+    }
+  } else { // bob (단발)
+    ctx.beginPath(); ctx.ellipse(-6, -50, 8, 10, 0.15, 0, 7); ctx.fill();
+  }
 
-  // 다리
+  const B = S.bottom;
   const legA = inAir ? 6 : walkP * 7;
-  ctx.fillStyle = S.skin;
-  ctx.fillRect(-7 + legA * 0.5, -12, 6, 12);
-  ctx.fillRect(2 - legA * 0.5, -12, 6, 12);
-  ctx.fillStyle = S.shoe;
-  ctx.fillRect(-8 + legA * 0.5, -4, 9, 4);
-  ctx.fillRect(1 - legA * 0.5, -4, 9, 4);
 
-  // 치마 (드레스)
-  ctx.fillStyle = S.dress;
-  ctx.beginPath();
-  ctx.moveTo(-11, -34);
-  ctx.quadraticCurveTo(-17 - walkP * 2, -18, -16, -8);
-  ctx.quadraticCurveTo(0, -3, 16, -8);
-  ctx.quadraticCurveTo(17 + walkP * 2, -18, 11, -34);
-  ctx.fill();
-  ctx.fillStyle = S.dressDark;
-  ctx.beginPath();
-  ctx.moveTo(-16, -9); ctx.quadraticCurveTo(0, -4, 16, -9);
-  ctx.lineTo(16, -6); ctx.quadraticCurveTo(0, -1, -16, -6); ctx.fill();
+  // ----- 다리 / 하의(바지) -----
+  if (B.style === 'pants') {
+    ctx.fillStyle = B.color;
+    ctx.fillRect(-8 + legA * 0.5, -30, 7, 27);
+    ctx.fillRect(2 - legA * 0.5, -30, 7, 27);
+    ctx.fillStyle = B.dark;
+    ctx.fillRect(-8 + legA * 0.5, -30, 7, 4);
+    ctx.fillRect(2 - legA * 0.5, -30, 7, 4);
+  } else {
+    ctx.fillStyle = S.skin;
+    ctx.fillRect(-7 + legA * 0.5, -16, 6, 16);
+    ctx.fillRect(2 - legA * 0.5, -16, 6, 16);
+  }
 
-  // 몸통
+  // ----- 신발 -----
+  ctx.fillStyle = S.shoes.color;
+  if (S.shoes.style === 'boot') {
+    ctx.fillRect(-8 + legA * 0.5, -14, 8, 14);
+    ctx.fillRect(1 - legA * 0.5, -14, 8, 14);
+    ctx.fillRect(-9 + legA * 0.5, -3, 10, 3);
+    ctx.fillRect(0 - legA * 0.5, -3, 10, 3);
+  } else {
+    ctx.fillRect(-8 + legA * 0.5, -4, 9, 4);
+    ctx.fillRect(1 - legA * 0.5, -4, 9, 4);
+  }
+
+  // ----- 하의(치마) -----
+  if (B.style === 'long') {
+    ctx.fillStyle = B.color;
+    ctx.beginPath();
+    ctx.moveTo(-11, -34);
+    ctx.quadraticCurveTo(-17 - walkP * 2, -18, -16, -8);
+    ctx.quadraticCurveTo(0, -3, 16, -8);
+    ctx.quadraticCurveTo(17 + walkP * 2, -18, 11, -34);
+    ctx.fill();
+    ctx.fillStyle = B.dark;
+    ctx.beginPath();
+    ctx.moveTo(-16, -9); ctx.quadraticCurveTo(0, -4, 16, -9);
+    ctx.lineTo(16, -6); ctx.quadraticCurveTo(0, -1, -16, -6); ctx.fill();
+  } else if (B.style === 'mini') {
+    ctx.fillStyle = B.color;
+    ctx.beginPath();
+    ctx.moveTo(-11, -34);
+    ctx.quadraticCurveTo(-14 - walkP, -24, -14, -17);
+    ctx.quadraticCurveTo(0, -13, 14, -17);
+    ctx.quadraticCurveTo(15 + walkP, -24, 11, -34);
+    ctx.fill();
+    ctx.fillStyle = B.dark;
+    ctx.beginPath();
+    ctx.moveTo(-14, -18); ctx.quadraticCurveTo(0, -14, 14, -18);
+    ctx.lineTo(14, -15); ctx.quadraticCurveTo(0, -11, -14, -15); ctx.fill();
+  }
+
+  // ----- 상의 (몸통) -----
   ctx.fillStyle = S.dress;
-  ctx.fillRect(-8, -42, 16, 10);
+  ctx.fillRect(-8, -42, 16, B.style === 'pants' ? 13 : 10);
   ctx.fillStyle = S.dressTrim;
   ctx.fillRect(-8, -35, 16, 2);
 
-  // 뒷팔
+  // ----- 뒷팔 -----
   ctx.fillStyle = S.skinShade;
   ctx.save();
   ctx.translate(-5, -40);
@@ -978,7 +1199,7 @@ function drawPrincess() {
   ctx.fillRect(-2, 0, 5, 14);
   ctx.restore();
 
-  // 검 + 앞팔
+  // ----- 무기 + 앞팔 -----
   const atk = p.atkT > 0;
   let armAng = 0.45 - walkP * 0.25;
   if (atk) {
@@ -991,17 +1212,47 @@ function drawPrincess() {
   ctx.rotate(armAng);
   ctx.fillStyle = S.skin;
   ctx.fillRect(-2.5, 0, 5, 14);
-  // 검
   ctx.translate(0, 14);
-  ctx.fillStyle = S.hilt; ctx.fillRect(-5, -2, 10, 4);
-  ctx.fillStyle = S.sword;
-  ctx.beginPath();
-  ctx.moveTo(-2.5, 2); ctx.lineTo(2.5, 2); ctx.lineTo(2.5, 30); ctx.lineTo(0, 36); ctx.lineTo(-2.5, 30);
-  ctx.fill();
-  ctx.fillStyle = S.swordEdge; ctx.fillRect(-0.5, 2, 1, 30);
+  const W = S.weapon;
+  if (W === 'great') {
+    ctx.fillStyle = S.hilt; ctx.fillRect(-7, -2, 14, 4);
+    ctx.fillStyle = '#c8bcd8';
+    ctx.beginPath();
+    ctx.moveTo(-4, 2); ctx.lineTo(4, 2); ctx.lineTo(4, 42); ctx.lineTo(0, 50); ctx.lineTo(-4, 42);
+    ctx.fill();
+    ctx.fillStyle = '#9a86b8'; ctx.fillRect(-0.7, 2, 1.4, 42);
+  } else if (W === 'dagger') {
+    ctx.fillStyle = S.hilt; ctx.fillRect(-4, -2, 8, 3.5);
+    ctx.fillStyle = S.sword;
+    ctx.beginPath();
+    ctx.moveTo(-2, 1.5); ctx.lineTo(2, 1.5); ctx.lineTo(2, 14); ctx.lineTo(0, 19); ctx.lineTo(-2, 14);
+    ctx.fill();
+    ctx.fillStyle = S.swordEdge; ctx.fillRect(-0.4, 1.5, 0.8, 14);
+  } else if (W === 'axe') {
+    ctx.fillStyle = '#8a5a34'; ctx.fillRect(-1.8, 0, 3.6, 38);
+    ctx.fillStyle = '#b8c4d4';
+    ctx.beginPath();
+    ctx.moveTo(1, 24);
+    ctx.quadraticCurveTo(16, 26, 13, 41);
+    ctx.quadraticCurveTo(8, 34, 1, 38);
+    ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-1, 27); ctx.lineTo(-9, 29); ctx.lineTo(-1, 35); ctx.fill();
+  } else if (W === 'hammer') {
+    ctx.fillStyle = '#8a5a34'; ctx.fillRect(-1.8, 0, 3.6, 34);
+    ctx.fillStyle = '#8a94a4';
+    ctx.beginPath(); ctx.roundRect(-9, 26, 18, 12, 3); ctx.fill();
+    ctx.fillStyle = '#6a7484'; ctx.fillRect(-9, 30, 18, 3);
+  } else { // sword
+    ctx.fillStyle = S.hilt; ctx.fillRect(-5, -2, 10, 4);
+    ctx.fillStyle = S.sword;
+    ctx.beginPath();
+    ctx.moveTo(-2.5, 2); ctx.lineTo(2.5, 2); ctx.lineTo(2.5, 30); ctx.lineTo(0, 36); ctx.lineTo(-2.5, 30);
+    ctx.fill();
+    ctx.fillStyle = S.swordEdge; ctx.fillRect(-0.5, 2, 1, 30);
+  }
   ctx.restore();
 
-  // 머리
+  // ----- 머리 -----
   ctx.fillStyle = S.skin;
   ctx.beginPath(); ctx.arc(1, -52, 11.5, 0, 7); ctx.fill();
   // 앞머리
@@ -1012,6 +1263,9 @@ function drawPrincess() {
   ctx.quadraticCurveTo(10, -52, 1, -55);
   ctx.fill();
   ctx.beginPath(); ctx.ellipse(-3, -60, 12, 8, -0.2, Math.PI, 0); ctx.fill();
+  if (S.hairStyle === 'bob') {
+    ctx.beginPath(); ctx.ellipse(-8, -48, 5, 9, 0.25, 0, 7); ctx.fill();
+  }
   // 눈
   ctx.fillStyle = S.eye;
   ctx.beginPath(); ctx.ellipse(6, -52, 2, 3, 0, 0, 7); ctx.fill();
@@ -1022,15 +1276,54 @@ function drawPrincess() {
   ctx.beginPath(); ctx.arc(3, -47.5, 2.2, 0, 7); ctx.fill();
   ctx.strokeStyle = '#c9586e'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.arc(9.5, -48.5, 1.6, 0.2, Math.PI - 0.5); ctx.stroke();
-  // 왕관
-  ctx.fillStyle = S.crown;
-  ctx.beginPath();
-  ctx.moveTo(-9, -64); ctx.lineTo(-8, -71); ctx.lineTo(-4.5, -65.5);
-  ctx.lineTo(-1, -73); ctx.lineTo(2.5, -65.5); ctx.lineTo(6, -70); ctx.lineTo(7, -63.5);
-  ctx.quadraticCurveTo(-1, -66.5, -9, -64);
-  ctx.fill();
-  ctx.fillStyle = S.gem;
-  ctx.beginPath(); ctx.arc(-1, -66.5, 1.8, 0, 7); ctx.fill();
+
+  // ----- 안경 -----
+  if (S.glasses === 'round') {
+    ctx.strokeStyle = '#5a4a3a'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(6, -52, 4.4, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(1.8, -53.5); ctx.lineTo(-8, -55); ctx.stroke();
+  } else if (S.glasses === 'sun') {
+    ctx.fillStyle = '#22242e';
+    ctx.beginPath(); ctx.roundRect(1.5, -56.5, 9.5, 7, 2); ctx.fill();
+    ctx.strokeStyle = '#22242e'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(2, -54.5); ctx.lineTo(-8, -56); ctx.stroke();
+  }
+
+  // ----- 모자 -----
+  const hat = S.hat;
+  if (hat.style === 'tiara') {
+    ctx.fillStyle = S.crown;
+    ctx.beginPath();
+    ctx.moveTo(-9, -64); ctx.lineTo(-8, -71); ctx.lineTo(-4.5, -65.5);
+    ctx.lineTo(-1, -73); ctx.lineTo(2.5, -65.5); ctx.lineTo(6, -70); ctx.lineTo(7, -63.5);
+    ctx.quadraticCurveTo(-1, -66.5, -9, -64);
+    ctx.fill();
+    ctx.fillStyle = S.gem;
+    ctx.beginPath(); ctx.arc(-1, -66.5, 1.8, 0, 7); ctx.fill();
+  } else if (hat.style === 'wizard') {
+    ctx.fillStyle = hat.dark;
+    ctx.beginPath(); ctx.ellipse(0, -60, 15, 4.5, -0.08, 0, 7); ctx.fill();
+    ctx.fillStyle = hat.color;
+    ctx.beginPath();
+    ctx.moveTo(-11, -60);
+    ctx.quadraticCurveTo(-2, -72, 2, -86);
+    ctx.quadraticCurveTo(8, -72, 11, -59);
+    ctx.quadraticCurveTo(0, -64, -11, -60);
+    ctx.fill();
+    ctx.fillStyle = '#ffd339';
+    ctx.beginPath(); ctx.arc(1, -76, 1.8, 0, 7); ctx.fill();
+  } else if (hat.style === 'ribbon') {
+    ctx.fillStyle = hat.color;
+    ctx.beginPath(); ctx.moveTo(-5, -63); ctx.lineTo(-13, -68); ctx.lineTo(-10, -59); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-5, -63); ctx.lineTo(0, -70); ctx.lineTo(2, -61); ctx.fill();
+    ctx.beginPath(); ctx.arc(-4.5, -63, 2.4, 0, 7); ctx.fill();
+  } else if (hat.style === 'straw') {
+    ctx.fillStyle = hat.color;
+    ctx.beginPath(); ctx.ellipse(1, -59, 17, 4.5, -0.05, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(1, -62, 9, 6.5, 0, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = '#c9556a';
+    ctx.fillRect(-7, -63.5, 17, 2.5);
+  }
 
   ctx.restore();
 }
@@ -1353,6 +1646,31 @@ function drawNpc(n) {
     ctx.beginPath(); ctx.moveTo(13, 0); ctx.lineTo(13, -62); ctx.stroke();
     ctx.fillStyle = '#ccd4e0';
     ctx.beginPath(); ctx.moveTo(9, -60); ctx.lineTo(13, -74); ctx.lineTo(17, -60); ctx.fill();
+  } else if (def.kind === 'stylist') {
+    ctx.translate(0, bob * 0.4);
+    // 다리
+    ctx.fillStyle = '#3a3a48'; ctx.fillRect(-7, -12, 6, 12); ctx.fillRect(2, -12, 6, 12);
+    // 원피스
+    ctx.fillStyle = '#9a6ad0';
+    ctx.beginPath(); ctx.moveTo(-9, -38); ctx.lineTo(9, -38); ctx.lineTo(12, -11); ctx.lineTo(-12, -11); ctx.fill();
+    ctx.fillStyle = '#f5d0ff'; ctx.fillRect(-9, -30, 19, 2.5);
+    // 머리
+    ctx.fillStyle = '#ffe0cc'; ctx.beginPath(); ctx.arc(1, -46, 9, 0, 7); ctx.fill();
+    // 보라 단발
+    ctx.fillStyle = '#c48ae8';
+    ctx.beginPath(); ctx.ellipse(-1, -50, 10.5, 8, -0.15, Math.PI, 0.2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-7, -42, 4.5, 8, 0.2, 0, 7); ctx.fill();
+    // 베레모
+    ctx.fillStyle = '#e8548a';
+    ctx.beginPath(); ctx.ellipse(-2, -55, 9.5, 4.5, -0.25, Math.PI, 0.15); ctx.fill();
+    // 눈/입
+    ctx.fillStyle = '#333'; ctx.beginPath(); ctx.arc(4, -46, 1.4, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#b06a50'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(6, -42, 1.6, 0.3, Math.PI - 0.6); ctx.stroke();
+    // 옷걸이 (들고 있음)
+    ctx.strokeStyle = '#c0c8d8'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(16, -30, 2.5, Math.PI * 0.4, Math.PI * 1.8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(10, -21); ctx.lineTo(16, -27); ctx.lineTo(22, -21); ctx.closePath(); ctx.stroke();
   } else { // merchant
     ctx.translate(0, bob * 0.4);
     // 다리
